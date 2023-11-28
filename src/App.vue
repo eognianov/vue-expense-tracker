@@ -3,7 +3,7 @@
   <div class="container">
     <Balance :total="+total"/>
     <IncomeExpenses :income="+income" :expenses="+expenses"/>
-    <TransactionsList :transactions="transactions"/>
+    <TransactionsList :transactions="transactions" @deleted="transactionDeletedHandler"/>
     <AddTransaction @submitted="transactionSubmittedHandler"/>
   </div>
 </template>
@@ -22,7 +22,7 @@ const toast = useToast();
 const transactions = ref([
   {id: 1, text: 'Flower', amount: -19.99},
   {id: 2, text: 'Games', amount: -59.99},
-  {id: 2, text: 'Games', amount: +1000},
+  {id: 3, text: 'Games', amount: +1000},
 ]);
 
 const total = computed(()=> {
@@ -54,6 +54,12 @@ const transactionSubmittedHandler = (transactionData) => {
 
 const generateUniqueId = () => {
   return Math.floor(Math.random() * 1000000);
+}
+
+const transactionDeletedHandler = (transactionId) => {
+  transactions.value = transactions.value.filter((transaction) => transaction.id !== transactionId);
+
+  toast.warning('Transaction is deleted')
 }
 
 </script>
